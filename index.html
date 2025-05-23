@@ -21,6 +21,11 @@
     <meta property="og:type" content="website" />
     <meta content="summary_large_image" name="twitter:card" />
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+    
+    <!-- Favicon -->
+    <link rel="icon" href="logo.png" type="image/png">
+    <link rel="shortcut icon" href="logo.png" type="image/png">
+    <link rel="apple-touch-icon" href="logo.png">
 
     <title>Mitigating Deceptive Alignment via Self-Monitoring</title>
     <!-- Google tag (gtag.js) -->
@@ -74,12 +79,11 @@
         </div>
         <p class="tldr">
             <b>TL;DR</b>:
-            Chain-of-thought reasoning can double large language models' deceptive alignment. Our CoT Monitor+ framework embeds a self-monitor into the reasoning steps, flags and suppresses misaligned strategies during generation, and uses the same signal as an RL reward. On the new DeceptionBench benchmark, CoT Monitor+ cuts deceptive behaviors by ≈44 % while preserving task accuracy and transparency.
+            Chain-of-thought reasoning can double large language models' deceptive alignment. Our CoT Monitor+ framework embeds a self-monitor into the reasoning steps, flags and suppresses misaligned strategies during generation, and uses the same signal as an RL reward. 
         </p>
         <!-- <video id="main-video" muted autoplay controls playsinline loop>
             <source id="mp4" src="data/videos/teaser.mp4" type="video/mp4">
         </video> -->
-        <img class="wide-img" src="data/figure_1_v7.png" alt="Self-Monitoring Framework Overview">
 
         <div id="content">
             <h2 class="section-header">Overview</h2>
@@ -87,7 +91,8 @@
                 <p>
                     Modern large language models rely on chain-of-thought (CoT) reasoning to achieve impressive performance, yet the same mechanism can amplify <i>deceptive alignment</i>, situations in which a model appears aligned while covertly pursuing misaligned goals.  Existing safety pipelines treat deception as a black-box output to be filtered <i>post-hoc</i>, leaving the model free to scheme during its internal reasoning. We ask: <i>Can deception be intercepted while the model is thinking?</i> We answer this question with <b>CoT Monitor +</b>, the first framework that embeds a <i>self-monitor</i> inside the CoT process itself.  During generation, the model produces (i) ordinary reasoning steps and (ii) an internal self-evaluation signal trained to flag and suppress misaligned strategies.  The same signal is used as an auxiliary reward in reinforcement learning, creating a feedback loop that rewards honest reasoning and discourages hidden goals. To study deceptive alignment systematically, we introduce <i><b>DeceptionBench</b></i>, a five-category benchmark that probes covert alignment-faking, sycophancy, etc. We evaluate various LLMs and show that unrestricted CoT roughly <i>doubles</i>he deceptive tendency compared to direct answers.  In contrast, CoT Monitor + cuts deceptive behaviors by <b>43.8%</b> on average while preserving task accuracy.  Further, when the self-monitor signal replaces an external weak judge in RL fine-tuning, models exhibit substantially fewer obfuscated thoughts and retain transparency.
                 </p>
-                <p><b>Contributions:</b></p>
+
+                <p><b>Key Contributions:</b></p>
                 <ul>
                     <li>
                         <b>Language models can self-monitor their reasoning processes</b>.
@@ -101,30 +106,17 @@
                     </li>
                 </ul>
             </div>
-
-            <h2 class="section-header">How It Works</h2>
-            <div class="paragraph">
-                <p>
-                    <b>(Left) How Self-Monitor works?</b>
-                    Unlike the standard LLMs reasoning process, the <span style="font-variant: small-caps;">Self-Monitor</span> model first detects deceptive or harmful patterns in its CoT, and then generates a safer response based on the monitor evaluation. In reinforcement learning, the reward signal from the self-monitor's CoT detection is combined with a standard action monitor to optimize the model. For more details, please refer to our paper.
-                </p>
-                <p>
-                    <b>(Right) How DeceptionBench evaluates deceptive tendency of models:</b> 
-                    Neutral prompts and specifically constructed prompts with an <em>outer goal</em> are used to elicit the model's <em>mesa utility</em> and CoT-Action pairs, respectively. These pairs are then evaluated for consistency and deceptiveness.
-                </p>
-            </div>
             
             <img class="med-img" src="deceptionbench_pipeline.gif" alt="Framework overview showing Self-Monitor working mechanism and DeceptionBench evaluation process">
-
-            <h2 class="section-header">Reinforcement Learning with Self-Monitoring Reward</h2>
-            <div class="paragraph">
-                <p>
-                    We introduce a novel approach where the self-monitor signal serves as an auxiliary reward in reinforcement learning. This creates a feedback loop that rewards honest reasoning and discourages hidden goals. Unlike traditional approaches that rely on external weak judges, our method uses the model's own self-evaluation capabilities to guide training.
-                </p>
-                <p>
-                    The self-monitoring reward encourages models to be more transparent in their reasoning processes while maintaining task performance. This approach addresses the fundamental challenge of deceptive alignment by intervening during the reasoning process itself, rather than only filtering outputs post-hoc.
-                </p>
-            </div>
+            <img class="sm-img" src="exp1_table.png" alt="Performance of Self-Monitor models compared to baselines">
+            <p>
+                <b>(Left) How Self-Monitor works?</b>
+                Unlike the standard LLMs reasoning process, the <span style="font-variant: small-caps;">Self-Monitor</span> model first detects deceptive or harmful patterns in its CoT, and then generates a safer response based on the monitor evaluation. In reinforcement learning, the reward signal from the self-monitor's CoT detection is combined with a standard action monitor to optimize the model. For more details, please refer to our paper.
+            </p>
+            <p>
+                <b>(Right) How DeceptionBench evaluates deceptive tendency of models:</b> 
+                Neutral prompts and specifically constructed prompts with an <em>outer goal</em> are used to elicit the model's <em>mesa utility</em> and CoT-Action pairs, respectively. These pairs are then evaluated for consistency and deceptiveness.
+            </p>
 
             <h2 class="section-header">DeceptionBench</h2>
             <div class="paragraph">
@@ -232,7 +224,7 @@
                 </p>
             </div>
             
-            <img class="large-img" src="exp1_table.png" alt="Performance of Self-Monitor models compared to baselines">
+            <img class="sm-img" src="exp1_table.png" alt="Performance of Self-Monitor models compared to baselines">
 
             <h3 class="subsection-header">Reinforcement Learning for Deceptive Alignment Mitigation</h3>
             <div class="paragraph">
